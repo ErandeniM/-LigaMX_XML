@@ -146,3 +146,24 @@ Se compararon dos diseños:
 Las seis obligatorias son las de la guía. Fueras de lugar y atajadas son opcionales para que un partido con cobertura básica siga siendo válido.
 
 En este paso también se agregó el detalle de goles dentro de `marcador`: cada `gol` indica a qué equipo se le cuenta, el minuto y el tipo (de jugada o de penal).
+
+## 5. DTD: elementos y cardinalidades (Actividad 5)
+
+`dtd/resultados.dtd` declara cada elemento con `<!ELEMENT …>`. Cardinalidades del modelo:
+
+| Regla | Expresión DTD |
+|---|---|
+| Una liga contiene una o más jornadas | `<!ELEMENT liga (jornada+)>` |
+| Una jornada contiene uno o más partidos | `<!ELEMENT jornada (partido+)>` |
+| Un partido tiene exactamente un local | `equipoLocal`, sin operador, en `<!ELEMENT partido (fecha, hora, estadio, equipoLocal, equipoVisitante, marcador?)>` |
+| Un partido tiene exactamente un visitante | `equipoVisitante`, sin operador, en la misma secuencia |
+| Una estadística opcional | `fuerasDeLugar?` y `atajadas?` en `<!ELEMENT estadisticas (posesion, tiros, tirosAPuerta, faltas, tirosDeEsquina, fuerasDeLugar?, atajadas?, tarjetas)>` |
+| Puede haber cero o más tarjetas | `<!ELEMENT tarjetas (tarjeta*)>` |
+
+Otras decisiones:
+
+- La coma (`,`) impone el orden de los hijos: un partido con el visitante antes que el local es inválido.
+- `marcador?` es opcional porque un partido programado o pospuesto todavía no tiene resultado.
+- `tarjetas` siempre está presente cuando hay estadísticas, aunque esté vacío: `<tarjetas/>` afirma "cero tarjetas", que no es lo mismo que "no hay datos".
+- `<!ELEMENT marcador (golesLocal, golesVisitante, gol*)>`: un 0–0 tiene marcador pero ningún `gol`.
+- Los nombres de los elementos van sin acentos (`posesion`, `estadisticas`) para evitar problemas de codificación entre herramientas.

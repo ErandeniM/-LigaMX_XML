@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  resultados.dtd
+  Reglas de los documentos XML con resultados y estadísticas de partidos
+  de la Liga MX. Fuente de los datos: ESPN México.
+-->
+
+<!-- ===================== Estructura general ===================== -->
+
+<!-- Una liga contiene una o más jornadas -->
+<!ELEMENT liga (jornada+)>
+
+<!-- Una jornada contiene uno o más partidos -->
+<!ELEMENT jornada (partido+)>
+
+<!-- Exactamente un local y un visitante, en ese orden.
+     El marcador es opcional: un partido programado aún no lo tiene. -->
+<!ELEMENT partido (fecha, hora, estadio, equipoLocal, equipoVisitante, marcador?)>
+
+<!ELEMENT fecha   (#PCDATA)>  <!-- AAAA-MM-DD -->
+<!ELEMENT hora    (#PCDATA)>  <!-- HH:MM -->
+<!ELEMENT estadio (#PCDATA)>
+
+<!-- ================== Equipos y estadísticas ==================== -->
+
+<!ELEMENT equipoLocal     (nombre, estadisticas?)>
+<!ELEMENT equipoVisitante (nombre, estadisticas?)>
+<!ELEMENT nombre          (#PCDATA)>
+
+<!-- Seis estadísticas obligatorias y dos opcionales -->
+<!ELEMENT estadisticas (posesion, tiros, tirosAPuerta, faltas, tirosDeEsquina,
+                        fuerasDeLugar?, atajadas?, tarjetas)>
+<!ELEMENT posesion       (#PCDATA)>  <!-- porcentaje, p. ej. 54.3 -->
+<!ELEMENT tiros          (#PCDATA)>
+<!ELEMENT tirosAPuerta   (#PCDATA)>
+<!ELEMENT faltas         (#PCDATA)>
+<!ELEMENT tirosDeEsquina (#PCDATA)>
+<!ELEMENT fuerasDeLugar  (#PCDATA)>
+<!ELEMENT atajadas       (#PCDATA)>
+
+<!-- Cero o más tarjetas; el contenido de cada una es el nombre del jugador -->
+<!ELEMENT tarjetas (tarjeta*)>
+<!ELEMENT tarjeta  (#PCDATA)>
+
+<!-- ========================== Marcador ========================== -->
+
+<!-- Goles de cada lado y, opcionalmente, el detalle de cada gol.
+     El contenido de gol es el nombre del anotador. -->
+<!ELEMENT marcador       (golesLocal, golesVisitante, gol*)>
+<!ELEMENT golesLocal     (#PCDATA)>
+<!ELEMENT golesVisitante (#PCDATA)>
+<!ELEMENT gol            (#PCDATA)>
