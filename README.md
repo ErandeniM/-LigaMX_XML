@@ -231,3 +231,36 @@ Alternativas:
   ```bash
   python -c "from lxml import etree; etree.parse('xml/resultados.xml', etree.XMLParser(dtd_validation=True)); print('válido')"
   ```
+
+## 8. Pruebas negativas (Actividad 8)
+
+`xml/resultados-invalido.xml` contiene seis partidos y cada uno tiene **un solo error**, así una sola ejecución muestra los seis diagnósticos. Cada prueba también se corrió por separado, en un documento con un partido válido más el partido con el error, y dio el mismo resultado.
+
+| Prueba | Partido | ¿Bien formado? | ¿Válido? | Error detectado (xmllint) |
+|---|---|---|---|---|
+| Falta visitante | P101 | Sí | No | `Element partido content does not follow the DTD` … `got (fecha hora estadio equipoLocal marcador)` |
+| Dos locales | P102 | Sí | No | `Element partido content does not follow the DTD` … `got (fecha hora estadio equipoLocal equipoLocal marcador)` |
+| Orden incorrecto | P103 | Sí | No | `Element partido content does not follow the DTD` … `got (fecha hora estadio equipoVisitante equipoLocal marcador)` |
+| Falta atributo obligatorio | P104 | Sí | No | `Element partido does not carry attribute estado` |
+| ID duplicado | P101 (repetido) | Sí | No | `ID P101 already defined` |
+| Elemento desconocido | P106 | Sí | No | `No declaration for element arbitro` y, en consecuencia, `Element partido content does not follow the DTD` |
+
+Salida completa:
+
+```text
+$ xmllint --noout xml/resultados-invalido.xml
+$ xmllint --noout --valid xml/resultados-invalido.xml
+xml/resultados-invalido.xml:24: element partido: validity error : Element partido content does not follow the DTD, expecting (fecha , hora , estadio , equipoLocal , equipoVisitante , marcador?), got (fecha hora estadio equipoLocal marcador )
+xml/resultados-invalido.xml:41: element partido: validity error : Element partido content does not follow the DTD, expecting (fecha , hora , estadio , equipoLocal , equipoVisitante , marcador?), got (fecha hora estadio equipoLocal equipoLocal marcador )
+xml/resultados-invalido.xml:58: element partido: validity error : Element partido content does not follow the DTD, expecting (fecha , hora , estadio , equipoLocal , equipoVisitante , marcador?), got (fecha hora estadio equipoVisitante equipoLocal marcador )
+xml/resultados-invalido.xml:75: element partido: validity error : Element partido does not carry attribute estado
+xml/resultados-invalido.xml:78: element partido: validity error : ID P101 already defined
+xml/resultados-invalido.xml:109: element arbitro: validity error : No declaration for element arbitro
+xml/resultados-invalido.xml:110: element partido: validity error : Element partido content does not follow the DTD, expecting (fecha , hora , estadio , equipoLocal , equipoVisitante , marcador?), got (fecha hora estadio equipoLocal equipoVisitante marcador arbitro )
+```
+
+El primer comando (solo sintaxis) no imprime nada: el archivo está bien formado. El segundo falla con código de salida 4 (error de validación).
+
+> **XML bien formado ≠ XML válido.** Los seis casos respetan la sintaxis de XML y cualquier parser los lee sin problema; lo que violan son las reglas del DTD, que solo revisa un parser validante.
+
+**Prueba adicional: documento no bien formado.** Se hizo fuera de este archivo porque un error de sintaxis detiene al parser y ocultaría los demás. Al borrar un `</nombre>`, xmllint se detiene con `parser error : Opening and ending tag mismatch: nombre line 19 and equipoLocal` (código de salida 1) y ni siquiera llega a validar contra el DTD.
