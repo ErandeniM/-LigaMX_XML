@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Resultados de la Liga MX del domingo 27 de septiembre de 2026
+  (jornada 10 del Torneo Apertura 2026).
+  Fuente: ESPN México, consultada el 6 de octubre de 2026
+  https://www.espn.com.mx/futbol/resultados/_/liga/mex.1/fecha/20260927
+  Horas en tiempo del centro de México (UTC-06:00).
+-->
+<liga nombre="Liga MX" torneo="Apertura 2026" temporada="2026-2027">
+  <jornada numero="10">
+
+    <!-- Pumas UNAM 2–3 Atlético de San Luis -->
+    <partido id="P001" estado="finalizado">
+      <fecha>2026-09-27</fecha>
+      <hora>12:00</hora>
+      <estadio ciudad="Ciudad de México">Estadio Olímpico Universitario</estadio>
+      <equipoLocal abreviatura="UNAM">
+        <nombre>Pumas UNAM</nombre>
+      </equipoLocal>
+      <equipoVisitante abreviatura="ASL">
+        <nombre>Atlético de San Luis</nombre>
+      </equipoVisitante>
+      <marcador>
+        <golesLocal>2</golesLocal>
+        <golesVisitante>3</golesVisitante>
+      </marcador>
+    </partido>
+
+  </jornada>
+</liga>

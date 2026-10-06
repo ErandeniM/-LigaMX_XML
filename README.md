@@ -97,3 +97,19 @@ Criterio general: **lo que se muestra o se mide va en elementos; lo que identifi
 | Estado del partido | Atributo `estado` | Toma un valor de una lista cerrada (programado, en_juego, finalizado…) que el DTD puede validar. |
 | Posesión | Elemento `posesion` | Es una medición del equipo; como elemento, agregar una estadística nueva no afecta a las demás. |
 | Tarjetas | Elemento `tarjetas` con hijos `tarjeta` | Puede haber varias por equipo y un atributo no se puede repetir; el color y el minuto van como atributos de cada `tarjeta`. |
+
+## 3. XML mínimo (Actividad 3)
+
+`xml/resultados.xml` empezó con un solo partido, Pumas UNAM 2–3 Atlético de San Luis: identificador, estado, fecha, hora, estadio, los dos equipos y el marcador. Lista de comprobación de XML bien formado:
+
+- [x] Un solo elemento raíz (`liga`).
+- [x] Todas las etiquetas están cerradas.
+- [x] El anidamiento es correcto y no hay etiquetas cruzadas.
+- [x] Todos los valores de atributos van entre comillas.
+- [x] La declaración `<?xml version="1.0" encoding="UTF-8"?>` está en la primera línea.
+
+Comprobación automática (si no imprime nada, el documento está bien formado):
+
+```bash
+xmllint --noout xml/resultados.xml
+```
