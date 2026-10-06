@@ -197,3 +197,37 @@ Con `ID`, el parser validante:
 1. **Garantiza que sea único en todo el documento.** Dos partidos `P001` producen un error de validación; con `CDATA` pasarían sin aviso.
 2. **Exige que sea un nombre XML válido.** Debe empezar con una letra o un guion bajo: `P001` es válido, `001` no. Por eso los identificadores llevan el prefijo `P`.
 3. **Lo vuelve referenciable.** Otros elementos pueden apuntarle con atributos `IDREF` (por ejemplo, una futura crónica `<resumen partido="P002">`, y el DTD verificaría que ese partido exista), y herramientas como `id('P002')` en XPath o `getElementById` en DOM lo encuentran directamente.
+
+## 7. Asociación XML–DTD (Actividad 7)
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE liga SYSTEM "../dtd/resultados.dtd">
+```
+
+- `liga` debe coincidir con el elemento raíz del documento.
+- `SYSTEM` indica que el DTD es externo, en un archivo propio.
+- La ruta es relativa **al archivo XML**, no a la carpeta desde donde se ejecuta el comando: desde `xml/` se sube un nivel (`..`) hasta `liga-mx-xml/` y se entra a `dtd/`. Por eso la validación funciona igual aunque se lance desde otra carpeta.
+
+## Cómo validar
+
+Con `xmllint` (viene en Linux y macOS; en Windows se puede usar desde WSL), ubicándose en la carpeta `liga-mx-xml/`:
+
+```bash
+# ¿Está bien formado? (solo revisa la sintaxis)
+xmllint --noout xml/resultados.xml
+
+# ¿Es válido? (sintaxis + reglas del DTD declarado en el DOCTYPE)
+xmllint --noout --valid xml/resultados.xml
+```
+
+`--noout` evita que se imprima el documento y `--valid` activa la validación contra el DTD. **Si el comando no imprime nada (código de salida 0), el documento es válido**; si no, xmllint muestra cada error con su número de línea. Para validar contra un DTD sin depender del `DOCTYPE`: `xmllint --noout --dtdvalid dtd/resultados.dtd xml/resultados.xml`.
+
+Alternativas:
+
+- **IntelliJ IDEA** y **VS Code** (con la extensión XML de Red Hat) leen el `DOCTYPE`, validan contra el DTD y subrayan los errores en el editor.
+- **Python con `lxml`**:
+
+  ```bash
+  python -c "from lxml import etree; etree.parse('xml/resultados.xml', etree.XMLParser(dtd_validation=True)); print('válido')"
+  ```
