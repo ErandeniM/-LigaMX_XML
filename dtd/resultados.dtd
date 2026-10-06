@@ -9,22 +9,45 @@
 
 <!-- Una liga contiene una o más jornadas -->
 <!ELEMENT liga (jornada+)>
+<!ATTLIST liga
+    nombre     CDATA #REQUIRED
+    torneo     CDATA #REQUIRED
+    temporada  CDATA #REQUIRED>
 
 <!-- Una jornada contiene uno o más partidos -->
 <!ELEMENT jornada (partido+)>
+<!ATTLIST jornada
+    numero     CDATA #REQUIRED>
 
 <!-- Exactamente un local y un visitante, en ese orden.
      El marcador es opcional: un partido programado aún no lo tiene. -->
 <!ELEMENT partido (fecha, hora, estadio, equipoLocal, equipoVisitante, marcador?)>
+<!ATTLIST partido
+    id         ID    #REQUIRED
+    estado     (programado | en_juego | finalizado | suspendido | pospuesto) #REQUIRED>
 
 <!ELEMENT fecha   (#PCDATA)>  <!-- AAAA-MM-DD -->
+
 <!ELEMENT hora    (#PCDATA)>  <!-- HH:MM -->
+<!-- Por omisión, tiempo del centro de México; un estadio en otra zona
+     (Tijuana, por ejemplo) puede indicar la suya. -->
+<!ATTLIST hora
+    zona       CDATA "UTC-06:00">
+
 <!ELEMENT estadio (#PCDATA)>
+<!ATTLIST estadio
+    ciudad     CDATA #REQUIRED>
 
 <!-- ================== Equipos y estadísticas ==================== -->
 
 <!ELEMENT equipoLocal     (nombre, estadisticas?)>
+<!ATTLIST equipoLocal
+    abreviatura CDATA #REQUIRED>
+
 <!ELEMENT equipoVisitante (nombre, estadisticas?)>
+<!ATTLIST equipoVisitante
+    abreviatura CDATA #REQUIRED>
+
 <!ELEMENT nombre          (#PCDATA)>
 
 <!-- Seis estadísticas obligatorias y dos opcionales -->
@@ -41,6 +64,11 @@
 <!-- Cero o más tarjetas; el contenido de cada una es el nombre del jugador -->
 <!ELEMENT tarjetas (tarjeta*)>
 <!ELEMENT tarjeta  (#PCDATA)>
+<!-- minuto y agregado se separan: 45+1 se escribe minuto="45" agregado="1" -->
+<!ATTLIST tarjeta
+    color      (amarilla | roja) #REQUIRED
+    minuto     NMTOKEN #REQUIRED
+    agregado   NMTOKEN #IMPLIED>
 
 <!-- ========================== Marcador ========================== -->
 
@@ -50,3 +78,9 @@
 <!ELEMENT golesLocal     (#PCDATA)>
 <!ELEMENT golesVisitante (#PCDATA)>
 <!ELEMENT gol            (#PCDATA)>
+<!-- equipo: lado al que se le cuenta el gol -->
+<!ATTLIST gol
+    equipo     (local | visitante) #REQUIRED
+    minuto     NMTOKEN #REQUIRED
+    agregado   NMTOKEN #IMPLIED
+    tipo       (jugada | penal) "jugada">

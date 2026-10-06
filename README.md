@@ -167,3 +167,33 @@ Otras decisiones:
 - `tarjetas` siempre está presente cuando hay estadísticas, aunque esté vacío: `<tarjetas/>` afirma "cero tarjetas", que no es lo mismo que "no hay datos".
 - `<!ELEMENT marcador (golesLocal, golesVisitante, gol*)>`: un 0–0 tiene marcador pero ningún `gol`.
 - Los nombres de los elementos van sin acentos (`posesion`, `estadisticas`) para evitar problemas de codificación entre herramientas.
+
+## 6. Atributos (Actividad 6)
+
+| Elemento | Atributo | Tipo | Uso o valor por omisión |
+|---|---|---|---|
+| `liga` | `nombre`, `torneo`, `temporada` | `CDATA` | `#REQUIRED` |
+| `jornada` | `numero` | `CDATA` | `#REQUIRED` |
+| `partido` | `id` | `ID` | `#REQUIRED` |
+| `partido` | `estado` | `(programado \| en_juego \| finalizado \| suspendido \| pospuesto)` | `#REQUIRED` |
+| `hora` | `zona` | `CDATA` | `"UTC-06:00"` |
+| `estadio` | `ciudad` | `CDATA` | `#REQUIRED` |
+| `equipoLocal`, `equipoVisitante` | `abreviatura` | `CDATA` | `#REQUIRED` |
+| `tarjeta` | `color` | `(amarilla \| roja)` | `#REQUIRED` |
+| `tarjeta`, `gol` | `minuto` | `NMTOKEN` | `#REQUIRED` |
+| `tarjeta`, `gol` | `agregado` | `NMTOKEN` | `#IMPLIED` |
+| `gol` | `equipo` | `(local \| visitante)` | `#REQUIRED` |
+| `gol` | `tipo` | `(jugada \| penal)` | `"jugada"` |
+
+- **`#REQUIRED`** para lo que identifica o clasifica sin excepción: el id, el estado, el color de una tarjeta.
+- **`#IMPLIED`** para `agregado`: solo existe cuando el evento ocurre en tiempo de reposición.
+- **Valor por omisión** cuando hay un caso normal: casi todos los goles son de jugada, así que `tipo` solo se escribe en los penales. La zona horaria es la del centro de México salvo que se indique otra; no se declaró `#FIXED` porque un estadio como el de Tijuana está en otra zona.
+- **`NMTOKEN`** en `minuto` y `agregado`: no admite espacios ni símbolos como `'` o `+`. Por eso el tiempo de reposición se guarda en dos atributos (`minuto="45" agregado="1"`) en lugar de `minuto="45+1"`, lo que además permite ordenar los eventos numéricamente.
+
+### ¿Qué ventaja tiene declarar el identificador como `ID` en lugar de `CDATA`?
+
+Con `ID`, el parser validante:
+
+1. **Garantiza que sea único en todo el documento.** Dos partidos `P001` producen un error de validación; con `CDATA` pasarían sin aviso.
+2. **Exige que sea un nombre XML válido.** Debe empezar con una letra o un guion bajo: `P001` es válido, `001` no. Por eso los identificadores llevan el prefijo `P`.
+3. **Lo vuelve referenciable.** Otros elementos pueden apuntarle con atributos `IDREF` (por ejemplo, una futura crónica `<resumen partido="P002">`, y el DTD verificaría que ese partido exista), y herramientas como `id('P002')` en XPath o `getElementById` en DOM lo encuentran directamente.
