@@ -16,13 +16,43 @@
       <estadio ciudad="Ciudad de México">Estadio Olímpico Universitario</estadio>
       <equipoLocal abreviatura="UNAM">
         <nombre>Pumas UNAM</nombre>
+        <estadisticas>
+          <posesion>54.3</posesion>
+          <tiros>15</tiros>
+          <tirosAPuerta>6</tirosAPuerta>
+          <faltas>12</faltas>
+          <tirosDeEsquina>11</tirosDeEsquina>
+          <fuerasDeLugar>4</fuerasDeLugar>
+          <atajadas>4</atajadas>
+          <tarjetas>
+            <tarjeta color="amarilla" minuto="45" agregado="1">César Huerta</tarjeta>
+          </tarjetas>
+        </estadisticas>
       </equipoLocal>
       <equipoVisitante abreviatura="ASL">
         <nombre>Atlético de San Luis</nombre>
+        <estadisticas>
+          <posesion>45.7</posesion>
+          <tiros>11</tiros>
+          <tirosAPuerta>7</tirosAPuerta>
+          <faltas>10</faltas>
+          <tirosDeEsquina>2</tirosDeEsquina>
+          <fuerasDeLugar>3</fuerasDeLugar>
+          <atajadas>4</atajadas>
+          <tarjetas>
+            <tarjeta color="amarilla" minuto="45" agregado="1">Oscar Macías</tarjeta>
+            <tarjeta color="amarilla" minuto="85">Román Torres</tarjeta>
+          </tarjetas>
+        </estadisticas>
       </equipoVisitante>
       <marcador>
         <golesLocal>2</golesLocal>
         <golesVisitante>3</golesVisitante>
+        <gol equipo="visitante" minuto="23" tipo="penal">Sébastien Salles-Lamonge</gol>
+        <gol equipo="local" minuto="52">Rodrigo López</gol>
+        <gol equipo="visitante" minuto="55">David Rodriguez</gol>
+        <gol equipo="visitante" minuto="79" tipo="penal">Sébastien Salles-Lamonge</gol>
+        <gol equipo="local" minuto="90" tipo="penal">Juninho</gol>
       </marcador>
     </partido>
 

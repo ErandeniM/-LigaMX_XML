@@ -113,3 +113,36 @@ Comprobación automática (si no imprime nada, el documento está bien formado):
 ```bash
 xmllint --noout xml/resultados.xml
 ```
+
+## 4. Estadísticas (Actividad 4)
+
+### Cómo relacionar cada estadística con su equipo
+
+Se compararon dos diseños:
+
+| | A. Estadísticas a nivel partido | B. Estadísticas dentro de cada equipo (elegido) |
+|---|---|---|
+| Ejemplo | `<posesion local="54.3" visitante="45.7"/>` | `<equipoLocal>` → `<estadisticas>` → `<posesion>54.3</posesion>` |
+| Comprensión | Cada estadística se lee en pares | Cada equipo tiene todos sus datos juntos |
+| Duplicación | Cada estadística repite el par local/visitante | Una sola declaración de `estadisticas` sirve para los dos equipos |
+| Procesamiento | El mismo dato vive en dos atributos distintos | El mismo código o XPath sirve para ambos (`equipoLocal/estadisticas/tiros`) |
+| Agregar una estadística | Un elemento nuevo con dos atributos | Una línea más en el modelo de `estadisticas` |
+
+**Decisión:** diseño B, el mismo que muestra la guía (Partido → Local/Visitante → Estadísticas). Las tarjetas se registran una por una (jugador, color y minuto) en lugar de guardar un conteo: el número de amarillas se obtiene contándolas, así no existen dos datos que puedan contradecirse.
+
+### Estadísticas seleccionadas
+
+| Elemento | Nombre en ESPN | Valor | Cardinalidad |
+|---|---|---|---|
+| `posesion` | Posesión | Porcentaje con un decimal | Obligatoria |
+| `tiros` | Tiros | Entero | Obligatoria |
+| `tirosAPuerta` | A gol | Entero | Obligatoria |
+| `faltas` | Faltas | Entero | Obligatoria |
+| `tirosDeEsquina` | Tiros de esquina | Entero | Obligatoria |
+| `fuerasDeLugar` | Fuera de lugar | Entero | Opcional |
+| `atajadas` | Salvadas / atajadas | Entero | Opcional |
+| `tarjetas/tarjeta` | Tarjetas amarillas y rojas | Una por tarjeta: jugador, color y minuto | Cero o más |
+
+Las seis obligatorias son las de la guía. Fueras de lugar y atajadas son opcionales para que un partido con cobertura básica siga siendo válido.
+
+En este paso también se agregó el detalle de goles dentro de `marcador`: cada `gol` indica a qué equipo se le cuenta, el minuto y el tipo (de jugada o de penal).
