@@ -78,9 +78,11 @@
 <!ELEMENT golesLocal     (#PCDATA)>
 <!ELEMENT golesVisitante (#PCDATA)>
 <!ELEMENT gol            (#PCDATA)>
-<!-- equipo: lado al que se le cuenta el gol -->
+<!-- equipo: lado al que se le cuenta el gol.
+     autogol (agregado en la Actividad 9): el anotador es del equipo
+     contrario al que se le cuenta el gol. -->
 <!ATTLIST gol
     equipo     (local | visitante) #REQUIRED
     minuto     NMTOKEN #REQUIRED
     agregado   NMTOKEN #IMPLIED
-    tipo       (jugada | penal) "jugada">
+    tipo       (jugada | penal | autogol) "jugada">

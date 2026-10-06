@@ -183,11 +183,11 @@ Otras decisiones:
 | `tarjeta`, `gol` | `minuto` | `NMTOKEN` | `#REQUIRED` |
 | `tarjeta`, `gol` | `agregado` | `NMTOKEN` | `#IMPLIED` |
 | `gol` | `equipo` | `(local \| visitante)` | `#REQUIRED` |
-| `gol` | `tipo` | `(jugada \| penal)` | `"jugada"` |
+| `gol` | `tipo` | `(jugada \| penal \| autogol)` (`autogol` desde la Actividad 9) | `"jugada"` |
 
 - **`#REQUIRED`** para lo que identifica o clasifica sin excepción: el id, el estado, el color de una tarjeta.
 - **`#IMPLIED`** para `agregado`: solo existe cuando el evento ocurre en tiempo de reposición.
-- **Valor por omisión** cuando hay un caso normal: casi todos los goles son de jugada, así que `tipo` solo se escribe en los penales. La zona horaria es la del centro de México salvo que se indique otra; no se declaró `#FIXED` porque un estadio como el de Tijuana está en otra zona.
+- **Valor por omisión** cuando hay un caso normal: casi todos los goles son de jugada, así que `tipo` solo se escribe en penales y autogoles. La zona horaria es la del centro de México salvo que se indique otra; no se declaró `#FIXED` porque un estadio como el de Tijuana está en otra zona.
 - **`NMTOKEN`** en `minuto` y `agregado`: no admite espacios ni símbolos como `'` o `+`. Por eso el tiempo de reposición se guarda en dos atributos (`minuto="45" agregado="1"`) en lugar de `minuto="45+1"`, lo que además permite ordenar los eventos numéricamente.
 
 ### ¿Qué ventaja tiene declarar el identificador como `ID` en lugar de `CDATA`?
@@ -211,7 +211,7 @@ Con `ID`, el parser validante:
 
 ## Cómo validar
 
-Con `xmllint` (viene en Linux y macOS; en Windows se puede usar desde WSL), ubicándose en la carpeta `liga-mx-xml/`:
+Con `xmllint` (viene incluido en macOS; en Linux está en el paquete `libxml2-utils`; en Windows se puede usar desde WSL), ubicándose en la carpeta `liga-mx-xml/`:
 
 ```bash
 # ¿Está bien formado? (solo revisa la sintaxis)
@@ -226,7 +226,7 @@ xmllint --noout --valid xml/resultados.xml
 Alternativas:
 
 - **IntelliJ IDEA** y **VS Code** (con la extensión XML de Red Hat) leen el `DOCTYPE`, validan contra el DTD y subrayan los errores en el editor.
-- **Python con `lxml`**:
+- **Python con `lxml`** (`pip install lxml`):
 
   ```bash
   python -c "from lxml import etree; etree.parse('xml/resultados.xml', etree.XMLParser(dtd_validation=True)); print('válido')"
@@ -264,3 +264,50 @@ El primer comando (solo sintaxis) no imprime nada: el archivo está bien formado
 > **XML bien formado ≠ XML válido.** Los seis casos respetan la sintaxis de XML y cualquier parser los lee sin problema; lo que violan son las reglas del DTD, que solo revisa un parser validante.
 
 **Prueba adicional: documento no bien formado.** Se hizo fuera de este archivo porque un error de sintaxis detiene al parser y ocultaría los demás. Al borrar un `</nombre>`, xmllint se detiene con `parser error : Opening and ending tag mismatch: nombre line 19 and equipoLocal` (código de salida 1) y ni siquiera llega a validar contra el DTD.
+
+## 9. Jornada del domingo 27 de septiembre de 2026 (Actividad 9)
+
+Con el modelo validado en un partido, se agregaron los otros dos encuentros de ese domingo. El documento final contiene la jornada 10 del Apertura 2026 con los tres partidos del día:
+
+| ID | Hora | Local | Marcador | Visitante | Estadio | Ficha en ESPN |
+|---|---|---|---|---|---|---|
+| P001 | 12:00 | Pumas UNAM | 2–3 | Atlético de San Luis | Olímpico Universitario, Ciudad de México | [juegoId 401876958](https://www.espn.com.mx/futbol/partido/_/juegoId/401876958/atletico-de-san-luis-pumas-unam) |
+| P002 | 19:00 | León | 2–1 | FC Juárez | Estadio León, León | [juegoId 401876957](https://www.espn.com.mx/futbol/partido/_/juegoId/401876957/fc-juarez-leon) |
+| P003 | 21:10 | Necaxa | 2–4 | América | Estadio Victoria, Aguascalientes | [juegoId 401876956](https://www.espn.com.mx/futbol/partido/_/juegoId/401876956/america-necaxa) |
+
+### Información nueva y decisiones
+
+Al capturar el León–Juárez, el DTD rechazó el documento:
+
+```text
+xml/resultados.xml:101: element gol: validity error : Value "autogol" for attribute tipo of gol is not among the enumerated set
+```
+
+Antes de cambiar el DTD se evaluó cada dato nuevo:
+
+| Información que apareció | ¿Requisito legítimo? | Decisión |
+|---|---|---|
+| **Autogol** (León–Juárez, 76'): el gol cuenta para León, pero lo anotó Francisco Nevarez, jugador de Juárez. | **Sí.** Sin distinguirlo, el XML diría que un jugador de Juárez anotó para León; el dato cambiaría de significado. | Se agregó el valor `autogol` a `gol/@tipo`. Es el único cambio al DTD. |
+| **Gol de cabeza** (Necaxa–América, 39', Henry Martín). | **No.** Describe la técnica, no el origen del gol. Ponerlo junto a `penal` y `autogol` en el mismo atributo mezclaría dos clasificaciones distintas (un autogol también puede ser de cabeza). | Se registró como `jugada`. Si más adelante se necesitara, iría en un atributo aparte, por ejemplo `parte="cabeza"`. |
+| **Eventos en tiempo de reposición** (45'+10', 90'+9'). | Ya estaba contemplado. | `minuto` + `agregado` desde la Actividad 6; sin cambios. |
+| **Partidos del viernes y del sábado** de la jornada 10. | Fuera del alcance pedido (domingo 27). | El modelo los aceptaría sin cambios gracias a `partido+`. |
+
+Con ese cambio, el documento completo vuelve a ser válido respecto a `resultados.dtd`, y `resultados-invalido.xml` sigue fallando en sus seis pruebas:
+
+```text
+$ xmllint --noout --valid xml/resultados.xml
+$ echo $?
+0
+```
+
+Además de la validación, se contrastaron todos los valores con la ficha de cada partido en ESPN: marcador, número de goles detallados por equipo, las siete estadísticas numéricas y el conteo de tarjetas amarillas y rojas.
+
+## Límites del DTD
+
+Un DTD controla la estructura, pero no el significado de los datos:
+
+- **No tiene tipos numéricos.** `<tiros>quince</tiros>` sería válido. Con XML Schema (XSD) se podrían exigir enteros no negativos y una posesión entre 0 y 100.
+- **No relaciona valores entre sí.** No puede verificar que `golesLocal` coincida con el número de `gol` del local, ni que las dos posesiones sumen 100.
+- **No condiciona la obligatoriedad.** No puede exigir `marcador` solo cuando `estado="finalizado"`.
+
+Para que el propio validador revisara esas reglas habría que pasar a XSD 1.1 (con aserciones) o complementar con Schematron.

@@ -57,5 +57,103 @@
       </marcador>
     </partido>
 
+    <!-- León 2–1 FC Juárez -->
+    <partido id="P002" estado="finalizado">
+      <fecha>2026-09-27</fecha>
+      <hora>19:00</hora>
+      <estadio ciudad="León">Estadio León</estadio>
+      <equipoLocal abreviatura="LEO">
+        <nombre>León</nombre>
+        <estadisticas>
+          <posesion>55.7</posesion>
+          <tiros>7</tiros>
+          <tirosAPuerta>3</tirosAPuerta>
+          <faltas>14</faltas>
+          <tirosDeEsquina>1</tirosDeEsquina>
+          <fuerasDeLugar>6</fuerasDeLugar>
+          <atajadas>0</atajadas>
+          <tarjetas>
+            <tarjeta color="amarilla" minuto="3">Sebastian Vegas</tarjeta>
+            <tarjeta color="amarilla" minuto="53">Juan Guevara</tarjeta>
+          </tarjetas>
+        </estadisticas>
+      </equipoLocal>
+      <equipoVisitante abreviatura="JUA">
+        <nombre>FC Juárez</nombre>
+        <estadisticas>
+          <posesion>44.3</posesion>
+          <tiros>9</tiros>
+          <tirosAPuerta>1</tirosAPuerta>
+          <faltas>14</faltas>
+          <tirosDeEsquina>4</tirosDeEsquina>
+          <fuerasDeLugar>1</fuerasDeLugar>
+          <atajadas>2</atajadas>
+          <tarjetas>
+            <tarjeta color="amarilla" minuto="79">Jesús Murillo</tarjeta>
+            <tarjeta color="amarilla" minuto="83">Francisco Nevarez</tarjeta>
+          </tarjetas>
+        </estadisticas>
+      </equipoVisitante>
+      <marcador>
+        <golesLocal>2</golesLocal>
+        <golesVisitante>1</golesVisitante>
+        <!-- Autogol: lo anotó un jugador de Juárez, pero cuenta para León -->
+        <gol equipo="local" minuto="76" tipo="autogol">Francisco Nevarez</gol>
+        <gol equipo="visitante" minuto="90" agregado="4" tipo="penal">Óscar Estupiñán</gol>
+        <gol equipo="local" minuto="90" agregado="9">José Alvarado</gol>
+      </marcador>
+    </partido>
+
+    <!-- Necaxa 2–4 América -->
+    <partido id="P003" estado="finalizado">
+      <fecha>2026-09-27</fecha>
+      <hora>21:10</hora>
+      <estadio ciudad="Aguascalientes">Estadio Victoria</estadio>
+      <equipoLocal abreviatura="NCX">
+        <nombre>Necaxa</nombre>
+        <estadisticas>
+          <posesion>53.3</posesion>
+          <tiros>15</tiros>
+          <tirosAPuerta>6</tirosAPuerta>
+          <faltas>16</faltas>
+          <tirosDeEsquina>3</tirosDeEsquina>
+          <fuerasDeLugar>1</fuerasDeLugar>
+          <atajadas>4</atajadas>
+          <tarjetas>
+            <tarjeta color="amarilla" minuto="62">Raúl Martínez</tarjeta>
+            <tarjeta color="amarilla" minuto="87">Diego Ochoa</tarjeta>
+            <tarjeta color="amarilla" minuto="90">Javier Ruiz</tarjeta>
+          </tarjetas>
+        </estadisticas>
+      </equipoLocal>
+      <equipoVisitante abreviatura="AME">
+        <nombre>América</nombre>
+        <estadisticas>
+          <posesion>46.7</posesion>
+          <tiros>20</tiros>
+          <tirosAPuerta>9</tirosAPuerta>
+          <faltas>6</faltas>
+          <tirosDeEsquina>5</tirosDeEsquina>
+          <fuerasDeLugar>2</fuerasDeLugar>
+          <atajadas>2</atajadas>
+          <tarjetas>
+            <tarjeta color="amarilla" minuto="33">Érick Sánchez</tarjeta>
+            <tarjeta color="amarilla" minuto="90" agregado="5">Cristian Borja</tarjeta>
+          </tarjetas>
+        </estadisticas>
+      </equipoVisitante>
+      <marcador>
+        <golesLocal>2</golesLocal>
+        <golesVisitante>4</golesVisitante>
+        <gol equipo="local" minuto="37">Owen González</gol>
+        <!-- ESPN lo marca como "gol de cabeza"; se registra como jugada (ver README) -->
+        <gol equipo="visitante" minuto="39">Henry Martín</gol>
+        <gol equipo="local" minuto="43" tipo="penal">Julián Carranza</gol>
+        <gol equipo="visitante" minuto="45" agregado="10" tipo="penal">Henry Martín</gol>
+        <gol equipo="visitante" minuto="56">Miguel Borja</gol>
+        <gol equipo="visitante" minuto="75" tipo="penal">Henry Martín</gol>
+      </marcador>
+    </partido>
+
   </jornada>
 </liga>
